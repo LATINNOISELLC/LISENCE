@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latin Noise LLC License Manager</title>
+<style>
+body{font-family:Arial,sans-serif;background:#111;margin:0;padding:20px;color:#222}
+.container{max-width:1000px;margin:auto;background:#fff;padding:30px;position:relative;overflow:hidden}
+.watermark{position:absolute;inset:0;background:url('https://drive.google.com/uc?export=view&id=1bziIMIcYIQUe1CCHjuDn-MPH_4CKZsjx') center/70% no-repeat;opacity:.05;pointer-events:none}
+.content{position:relative;z-index:1}
+.logo{text-align:center}
+.logo img{max-width:260px}
+h1,h2{text-align:center}
+input,select,textarea{width:100%;padding:10px;margin:6px 0 12px;border:1px solid #ccc}
+button{padding:12px 18px;margin:5px;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+@media print {.noprint{display:none} body{background:white;padding:0} .container{max-width:none}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="watermark"></div>
+<div class="content">
+<div class="logo">
+<img src="https://drive.google.com/uc?export=view&id=1bziIMIcYIQUe1CCHjuDn-MPH_4CKZsjx">
+</div>
+
+<h1>JEC BEATS</h1>
+<h2>Latin Noise LLC Beat License</h2>
+
+<div class="grid">
+<div>
+<label>License Number</label>
+<input id="licenseNumber" readonly>
+</div>
+<div>
+<label>Date</label>
+<input id="purchaseDate" readonly>
+</div>
+</div>
+
+<h3>Producer Information</h3>
+<input value="Itsjblass" readonly>
+<input value="JEC BEATS" readonly>
+<input value="Latin Noise LLC" readonly>
+<input value="noiselatin@gmail.com" readonly>
+
+<h3>Buyer Information</h3>
+<input id="buyerName" placeholder="Legal Name">
+<input id="artistName" placeholder="Artist Name">
+<input id="buyerEmail" placeholder="Email">
+
+<h3>Beat Information</h3>
+<input id="beatTitle" placeholder="Beat Title">
+<select id="licenseType">
+<option>Basic MP3 Lease</option>
+<option>WAV Lease</option>
+<option>Unlimited License</option>
+<option>Exclusive License</option>
+</select>
+
+<h3>License Terms</h3>
+<textarea rows="10">All copyrights to the instrumental remain the property of Latin Noise LLC unless transferred by a separate written Exclusive Agreement. Producer credit: Produced by Itsjblass.</textarea>
+
+<div>
+<p>Licensor Signature: ___________________________</p>
+<p>Licensee Signature: ___________________________</p>
+</div>
+
+<div class="noprint">
+<button onclick="saveCustomer()">Save Customer</button>
+<button onclick="receipt()">Generate Receipt</button>
+<button onclick="window.print()">Print / Save PDF</button>
+</div>
+</div>
+</div>
+
+<script>
+let current = parseInt(localStorage.getItem("licenseCounter") || "1");
+document.getElementById("licenseNumber").value = "LN-" + String(current).padStart(6,"0");
+document.getElementById("purchaseDate").value = new Date().toISOString().split('T')[0];
+localStorage.setItem("licenseCounter", current + 1);
+
+function saveCustomer(){
+ let rec={
+  license:licenseNumber.value,
+  buyer:buyerName.value,
+  artist:artistName.value,
+  email:buyerEmail.value,
+  beat:beatTitle.value,
+  type:licenseType.value,
+  date:purchaseDate.value
+ };
+ let arr=JSON.parse(localStorage.getItem("JECRecords")||"[]");
+ arr.push(rec);
+ localStorage.setItem("JECRecords",JSON.stringify(arr));
+ alert("Customer saved locally.");
+}
+
+function receipt(){
+ alert(
+"LATIN NOISE LLC\n\nLicense: "+licenseNumber.value+
+"\nBuyer: "+buyerName.value+
+"\nArtist: "+artistName.value+
+"\nBeat: "+beatTitle.value+
+"\nLicense Type: "+licenseType.value+
+"\nDate: "+purchaseDate.value+
+"\nProducer: Itsjblass"
+ );
+}
+</script>
+</body>
+</html>
